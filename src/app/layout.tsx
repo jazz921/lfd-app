@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Navbar from "@/components/Navbar";
+import { ReduxProvider } from "@/store/providers/Provider";
 import "../styles/globals.css";
 
 const avenirBold = localFont({
@@ -67,9 +68,11 @@ export default function RootLayout({
           avenirLightItalic.variable,
         ].join(" ")} antialiased`}
       >
-        <Navbar />
-        <div className="w-full h-[56px] md:h-[72px] mb-0.5"></div>
-        {children}
+        <ReduxProvider>
+          <Navbar />
+          <div className="w-full h-[56px] md:h-[72px] mb-0.5"></div>
+          {children}
+        </ReduxProvider>
       </body>
     </html>
   );

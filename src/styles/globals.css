@@ -13,18 +13,25 @@
   --font-avenir-regular-italic: var(--AvenirRegularItalic);
   --font-avenir-light: var(--AvenirLight);
   --font-avenir-light-italic: var(--AvenirLightItalic);
-  
+
   /* Colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-light-blue: #80BDFF;
-  --color-sky-blue: #5B8DFF;
-  --color-blue-orange-gradient: linear-gradient(90deg, #BDD6F6 0%, #B0B2E2 20%, #C49EDC 40%, #EE9AC7 60%, #F9A88A 80%, #FCB670 100%);
-  
+  --color-light-blue: #80bdff;
+  --color-sky-blue: #5b8dff;
+  --color-light-grey: #dadada;
+  --color-blue-orange-gradient: linear-gradient(
+    90deg,
+    #bdd6f6 0%,
+    #b0b2e2 20%,
+    #c49edc 40%,
+    #ee9ac7 60%,
+    #f9a88a 80%,
+    #fcb670 100%
+  );
 
   /* Animate */
   --animate-fade-in: fadeIn 0.5s ease-in-out;
-  
 }
 
 @media (prefers-color-scheme: dark) {
@@ -37,18 +44,46 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif, 'Avenir';
+  font-family: Arial, Helvetica, sans-serif, "Avenir";
 }
 
 /* Keyframes */
 /* Animation */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
+/* TODO Add slideLeft & slideRight */
 
 /* Utility Classes for Components */
 .overlay {
-  @apply bg-black/50 h-screen w-screen absolute top-0 right-0 bottom-0 left-0 z-50
+  @apply bg-black/50 h-screen w-screen absolute top-0 right-0 bottom-0 left-0 z-50;
+}
+
+.boxContainerShadow {
+  @apply shadow-[3px_4px_12.3px_rgba(0,0,0,0.25)];
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  border-radius: 100vh;
+  background: #ffffff;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #999898;
+  border-radius: 100vh;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #a7a7a7;
 }
