@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -243,114 +243,108 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col gap-y-5 items-start p-4">
-      {/* <div>
-        <label>Select file 1</label>
-        <input
-          type="file"
-          accept=".xlsx,.xls,.csv"
-          // onChange={handleThailand2022}
-        />
+    <div className="flex flex-col gap-y-5 items-center p-4">
+      <div className="text-center mt-[20px]">
+        <p className="font-avenir-regular font-bold text-[24px]">
+          Lens Forecast Dashboard
+        </p>
+        <p className="font-avenir-light mt-[20px] lg:w-[40vw]">
+          Select a country and input the number of people to estimate how many
+          Ready 2 Clip lenses you will need for your clinic based on previous
+          data.
+        </p>
       </div>
-      <div>
-        <label>Select file 2</label>
-        <input
-          type="file"
-          accept=".xlsx,.xls,.csv"
-          // onChange={handleThailand2023}
-        />
-      </div>
-      <div>
-        <label>Select file 3</label>
-        <input
-          type="file"
-          accept=".xlsx,.xls,.csv"
-          // onChange={handleBangkokOnesight}
-        />
-      </div> */}
 
       <button className="bg-amber-200 p-3" onClick={execute}>
         Execute
       </button>
 
-      {/* ---------- Summary ---------- */}
-      {Object.keys(summary).length > 0 && (
-        <div className="mt-6">
-          <h2 className="text-lg font-bold">Summary Stats</h2>
-          <ul className="list-disc pl-6">
-            {Object.entries(summary).map(([k, v]) => (
-              <li key={k}>
-                {k}: {v}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {/* ---------- Gender Summary ---------- */}
-      {summaryTable.length > 0 && (
-        <div className="mt-6">
-          <h2 className="text-lg font-bold">
-            Gender Summary (Excluding Readers)
-          </h2>
-          <table className="border-collapse border border-gray-400">
-            <thead>
-              <tr>
-                {summaryTable[0].map((head, i) => (
-                  <th key={i} className="border border-gray-400 px-2 py-1">
-                    {head}
-                  </th>
+      <div className="w-full flex flex-col lg:flex-row justify-center">
+        <div>
+          {/* ---------- Summary ---------- */}
+          {Object.keys(summary).length > 0 && (
+            <div className="mt-6">
+              <h2 className="text-lg font-bold">Summary Stats</h2>
+              <ul className="list-disc pl-6">
+                {Object.entries(summary).map(([k, v]) => (
+                  <li key={k}>
+                    {k}: {v}
+                  </li>
                 ))}
-              </tr>
-            </thead>
-            <tbody>
-              {summaryTable.slice(1).map((row, i) => (
-                <tr key={i}>
-                  {row.map((cell: any, j: number) => (
-                    <td key={j} className="border border-gray-400 px-2 py-1">
-                      {cell}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+              </ul>
+            </div>
+          )}
 
-      {/* ---------- Power Tables ---------- */}
-      {powerTables.length > 0 && (
-        <div className="mt-6">
-          <h2 className="text-lg font-bold">Power Distribution</h2>
-          {powerTables.map((group, idx) => (
-            <div key={idx} className="mt-4">
-              <h3 className="font-semibold">{group.groupName}</h3>
-              <table className="border-collapse border border-gray-400 text-sm">
+          {/* ---------- Gender Summary ---------- */}
+          {summaryTable.length > 0 && (
+            <div className="mt-6">
+              <h2 className="text-lg font-bold">
+                Gender Summary (Excluding Readers)
+              </h2>
+              <table className="border-collapse border border-gray-400">
                 <thead>
                   <tr>
-                    <th className="border px-2">Power</th>
-                    <th className="border px-2">Right</th>
-                    <th className="border px-2">Left</th>
-                    <th className="border px-2">Combined</th>
-                    <th className="border px-2">Percentage</th>
+                    {summaryTable[0].map((head, i) => (
+                      <th key={i} className="border border-gray-400 px-2 py-1">
+                        {head}
+                      </th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody>
-                  {group.table.map((row: any, i: number) => (
+                  {summaryTable.slice(1).map((row, i) => (
                     <tr key={i}>
-                      <td className="border px-2">{row.power}</td>
-                      <td className="border px-2">{row.right}</td>
-                      <td className="border px-2">{row.left}</td>
-                      <td className="border px-2">{row.combined}</td>
-                      <td className="border px-2">{row.percentage}</td>
+                      {row.map((cell: any, j: number) => (
+                        <td
+                          key={j}
+                          className="border border-gray-400 px-2 py-1"
+                        >
+                          {cell}
+                        </td>
+                      ))}
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-          ))}
+          )}
         </div>
-      )}
+
+        {/* ---------- Power Tables ---------- */}
+        <div>
+          {powerTables.length > 0 && (
+            <div className="flex flex-col lg:flex-row gap-x-2">
+              {powerTables.map((group, idx) => (
+                <div key={idx} className="mt-4">
+                  <h3 className="font-semibold">{group.groupName}</h3>
+                  <table className="border-collapse border border-gray-400 text-sm">
+                    <thead>
+                      <tr>
+                        <th className="border px-2">Power</th>
+                        <th className="border px-2">Right</th>
+                        <th className="border px-2">Left</th>
+                        <th className="border px-2">Combined</th>
+                        <th className="border px-2">Percentage</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {group.table.map((row: any, i: number) => (
+                        <tr key={i}>
+                          <td className="border px-2">{row.power}</td>
+                          <td className="border px-2">{row.right}</td>
+                          <td className="border px-2">{row.left}</td>
+                          <td className="border px-2">{row.combined}</td>
+                          <td className="border px-2">{row.percentage}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
