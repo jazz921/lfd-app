@@ -32,6 +32,8 @@
 
   /* Animate */
   --animate-fade-in: fadeIn 0.5s ease-in-out;
+  --animate-slide-left: slideLeft 0.5s ease-in-out;
+  --animate-slide-right: slideRight 0.5s ease-in-out;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -48,7 +50,6 @@ body {
 }
 
 /* Keyframes */
-/* Animation */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -58,7 +59,36 @@ body {
   }
 }
 
-/* TODO Add slideLeft & slideRight */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideLeft {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideRight {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
 
 /* Utility Classes for Components */
 .overlay {

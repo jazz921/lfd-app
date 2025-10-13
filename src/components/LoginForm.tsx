@@ -3,12 +3,23 @@
 import React from "react";
 import BoxContainer from "./BoxContainer";
 import Button from "./Button";
+import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
+  const router = useRouter()
+
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    /*
+    TODO:  Do Correct Authentication
+    */
+    router.push("/admin/home")
+  }
+
   return (
     <div className="flex justify-center items-center mt-24">
       <BoxContainer>
-        <form>
+        <form onSubmit={handleLogin}>
           <div className="flex flex-col items-center px-6 py-10 gap-y-9 w-[400px]">
             <h2 className="font-avenir-regular text-xl">Admin Login</h2>
             <div className="flex flex-col w-full">
