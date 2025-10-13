@@ -1,10 +1,21 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import SideMenu from "./SideMenu";
+import { usePathname } from "next/navigation";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const pathname = usePathname()
+
+  const handleSideMenu = () => {
+    setIsOpen(prev => !prev)
+  }
+
+  useEffect(() => {
+    setIsOpen(false)
+  }, [pathname])
 
   return (
     <>
@@ -16,12 +27,14 @@ const Navbar = () => {
           height={32}
         />
 
-        <div className="w-[24px] h-[24px] relative flex flex-col justify-around cursor-pointer">
+        <div onClick={handleSideMenu} className="w-[24px] h-[24px] relative flex flex-col justify-around cursor-pointer">
           {[1, 2, 3].map((i) => (
             <span key={i} className="w-full h-[3px] bg-black rounded-md"></span>
           ))}
         </div>
       </nav>
+
+      <SideMenu isOpen={isOpen} setIsOpen={handleSideMenu} />
     </>
   );
 };

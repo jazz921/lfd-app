@@ -10,6 +10,7 @@ interface ModalProps {
   fullWidth?: boolean;
   fullHeight?: boolean;
   children?: React.ReactNode;
+  entrance?: "slideLeft" | "slideRight" | "fadeIn";
 }
 
 const Modal = ({
@@ -19,24 +20,11 @@ const Modal = ({
   fullHeight,
   fullWidth,
   children,
+  entrance,
 }: ModalProps) => {
   const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (open) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [open]);
+  const [show, setShow] = useState(open);
+  const [animate, setAnimate] = useState("animate-fade-in");
 
   const handleContentPosition = (pos: string) => {
     switch (pos) {
@@ -49,7 +37,42 @@ const Modal = ({
     }
   };
 
-  if (!open || !mounted) return null;
+  const handleAnimate = () => {
+    switch (entrance) {
+      case "slideLeft":
+        return "animate-slide-left";
+      case "slideRight":
+        return "animate-slide-right";
+      case "fadeIn":
+      default:
+        return "animate-fade-in";
+    }
+  };
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  /*
+  TODO: Handle exit animation gracefully 
+  -Currently the Modal instantly disappear when it is closed => handle the exit Properly
+  */
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+      setShow(true);
+      setAnimate(handleAnimate());
+    } else {
+      document.body.style.overflow = "";
+      setShow(false);
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
+  if (!show || !mounted) return null;
 
   return createPortal(
     <div
@@ -59,7 +82,7 @@ const Modal = ({
       onClick={close}
     >
       <div
-        className={`bg-white rounded-xs shadow-lg z-50 ${
+        className={`bg-white rounded-xs shadow-lg z-50 ${animate} ${
           fullWidth ? "w-full" : "w-auto"
         } ${fullHeight ? "h-full" : "h-auto"}`}
         onClick={(e) => e.stopPropagation()}
