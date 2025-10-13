@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import fileSlice, { getFileState } from "@/store/slices/file.slice";
 
+
 interface DataRow {
   Gender?: string;
   Age?: number;
@@ -86,8 +87,8 @@ export default function Home() {
 
     const percentageNoGlasses = thailand2223.length
       ? ((thailand2223.length - thailand2223Glasses.length) /
-          thailand2223.length) *
-        100
+        thailand2223.length) *
+      100
       : 0;
 
     // ---------- Breakdown ----------
@@ -211,30 +212,30 @@ export default function Home() {
       childrenNonReaders.length;
 
     setSummary({
-      percentageSentToLab: percentageSentToLab.toFixed(2) + "%",
-      percentageNoGlasses: percentageNoGlasses.toFixed(2) + "%",
-      readingPercentage: readingPercentage.toFixed(2) + "%",
-      ophPercentage: ophPercentage.toFixed(2) + "%",
-      r2cPercentage: lenTotalOph
+      SentToLab: percentageSentToLab.toFixed(2) + "%",
+      NoGlasses: percentageNoGlasses.toFixed(2) + "%",
+      Reading: readingPercentage.toFixed(2) + "%",
+      OPH: ophPercentage.toFixed(2) + "%",
+      R2C: lenTotalOph
         ? ((totalR2c / lenTotalOph) * 100).toFixed(2) + "%"
         : "0%",
-      glassesPct: thailand2223.length
+      Glasses: thailand2223.length
         ? ((thailand2223Glasses.length / thailand2223.length) * 100).toFixed(
-            2
-          ) + "%"
+          2
+        ) + "%"
         : "0%",
-      readersPct: thailand2223Glasses.length
+      Readers: thailand2223Glasses.length
         ? (
-            (readingThailand2223.length / thailand2223Glasses.length) *
-            100
-          ).toFixed(2) + "%"
+          (readingThailand2223.length / thailand2223Glasses.length) *
+          100
+        ).toFixed(2) + "%"
         : "0%",
-      ophthalmicPct: thailand2223.length
+      Ophthalmic: thailand2223.length
         ? (
-            ((thailand2223Glasses.length - readingThailand2223.length) /
-              thailand2223.length) *
-            100
-          ).toFixed(2) + "%"
+          ((thailand2223Glasses.length - readingThailand2223.length) /
+            thailand2223.length) *
+          100
+        ).toFixed(2) + "%"
         : "0%",
     });
 
@@ -243,114 +244,132 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col gap-y-5 items-start p-4">
-      {/* <div>
-        <label>Select file 1</label>
-        <input
-          type="file"
-          accept=".xlsx,.xls,.csv"
-          // onChange={handleThailand2022}
-        />
+    <div className="flex overflow-hidden flex-col items-center justify-start text-center w-full pt-6">
+      <div className="w-1/2 mb-4 gap-y-3">
+        <div className="mb-3">
+          <h1 className="mb-3 text-3xl font-semibold">Lens Forecast Dashboard</h1>
+          <p style={{ fontSize: "12px" }}>
+            Select a country and input the number of people to estimate how many Ready 2 Clip lenses you will need for your clinic based on previous data.
+          </p>
+        </div>
+        <div className="flex w-full flex-row justify-between">
+          <div className="flex">
+            <label className="semi-bold text-sm text-wrap mr-3 my-2">Select a Country</label>
+            <select className="border border-gray-400 p-2" id="countries" name="countries">
+              <option value="ph">Philippines</option>
+              <option value="jp">Japan</option>
+              <option value="us">United States</option>
+              <option value="fr">France</option>
+            </select>
+          </div>
+          <div className="">
+            <label className="semi-bold text-sm mr-3 my-2">Input the number of people</label>
+            <input className="border border-gray-400 p-2" type="text" />
+          </div>
+        </div>
       </div>
-      <div>
-        <label>Select file 2</label>
-        <input
-          type="file"
-          accept=".xlsx,.xls,.csv"
-          // onChange={handleThailand2023}
-        />
+      <div className="flex flex-row w-full px-8 py-2">
+        <div style={{ width: "40%" }} className="px-2">
+          <div className="text-left bg-black text-white p-2 mb-1">
+            <h5 className="text-sm font-semibold">Results</h5>
+          </div>
+          <div className="flex flex-row justify-between align-center px-3">
+            <div>
+              {
+                Object.keys(summary).length > 0 && (
+                  <div className="mt-6">
+                    <h2 className="text-lg font-bold text-left mb-3">Summary Stats</h2>
+                    <ul className="list-disc text-left pl-6">
+                      {Object.entries(summary).map(([k, v]) => (
+                        <li key={k}>
+                          {k}: {v}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )
+              }
+            </div>
+            <div>
+              {
+                summaryTable.length > 0 && (
+                  <div className="mt-6">
+                    <h2 className="text-lg font-bold text-left mb-3">
+                      Gender Summary (Excluding Readers)
+                    </h2>
+                    <table className="border-collapse border border-gray-400">
+                      <thead>
+                        <tr style={{ backgroundColor: "#80bdff33" }}>
+                          {summaryTable[0].map((head, i) => (
+                            <th key={i} className="border border-gray-400 px-2 py-1">
+                              {head}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {summaryTable.slice(1).map((row, i) => (
+                          <tr key={i}>
+                            {row.map((cell: any, j: number) => (
+                              <td key={j} className="border border-gray-400 px-2 py-1">
+                                {cell}
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )
+              }
+            </div>
+          </div>
+        </div>
+        <div style={{ width: "65%" }} className="flex-col px-2">
+          <div className="text-left bg-black text-white p-2 mb-1">
+            <h5 className="text-sm font-semibold">Demographic</h5>
+          </div>
+
+          <div className="flex flex-row gap-x-2 px-3">
+            {powerTables.map((group, idx) => (
+              <div key={idx} className="mt-4 w-full">
+                <h3 className="font-semibold mb-2">{group.groupName}</h3>
+
+                {/* Scrollable wrapper for the table */}
+                <div className="max-h-100 overflow-y-auto border border-gray-300 rounded-md">
+                  <table className="border-collapse border border-gray-400 text-sm w-full">
+                    <thead className="sticky top-0 bg-[#80bdff]">
+                      <tr>
+                        <th className="border px-2 py-1">Power</th>
+                        <th className="border px-2 py-1">Right</th>
+                        <th className="border px-2 py-1">Left</th>
+                        <th className="border px-2 py-1">Combined</th>
+                        <th className="border px-2 py-1">Percentage</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {group.table.map((row: any, i: number) => (
+                        <tr key={i}>
+                          <td className="border px-2 py-1">{row.power}</td>
+                          <td className="border px-2 py-1">{row.right}</td>
+                          <td className="border px-2 py-1">{row.left}</td>
+                          <td className="border px-2 py-1">{row.combined}</td>
+                          <td className="border px-2 py-1">{row.percentage}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
       </div>
-      <div>
-        <label>Select file 3</label>
-        <input
-          type="file"
-          accept=".xlsx,.xls,.csv"
-          // onChange={handleBangkokOnesight}
-        />
-      </div> */}
 
       <button className="bg-amber-200 p-3" onClick={execute}>
         Execute
       </button>
-
-      {/* ---------- Summary ---------- */}
-      {Object.keys(summary).length > 0 && (
-        <div className="mt-6">
-          <h2 className="text-lg font-bold">Summary Stats</h2>
-          <ul className="list-disc pl-6">
-            {Object.entries(summary).map(([k, v]) => (
-              <li key={k}>
-                {k}: {v}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {/* ---------- Gender Summary ---------- */}
-      {summaryTable.length > 0 && (
-        <div className="mt-6">
-          <h2 className="text-lg font-bold">
-            Gender Summary (Excluding Readers)
-          </h2>
-          <table className="border-collapse border border-gray-400">
-            <thead>
-              <tr>
-                {summaryTable[0].map((head, i) => (
-                  <th key={i} className="border border-gray-400 px-2 py-1">
-                    {head}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {summaryTable.slice(1).map((row, i) => (
-                <tr key={i}>
-                  {row.map((cell: any, j: number) => (
-                    <td key={j} className="border border-gray-400 px-2 py-1">
-                      {cell}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {/* ---------- Power Tables ---------- */}
-      {powerTables.length > 0 && (
-        <div className="mt-6">
-          <h2 className="text-lg font-bold">Power Distribution</h2>
-          {powerTables.map((group, idx) => (
-            <div key={idx} className="mt-4">
-              <h3 className="font-semibold">{group.groupName}</h3>
-              <table className="border-collapse border border-gray-400 text-sm">
-                <thead>
-                  <tr>
-                    <th className="border px-2">Power</th>
-                    <th className="border px-2">Right</th>
-                    <th className="border px-2">Left</th>
-                    <th className="border px-2">Combined</th>
-                    <th className="border px-2">Percentage</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {group.table.map((row: any, i: number) => (
-                    <tr key={i}>
-                      <td className="border px-2">{row.power}</td>
-                      <td className="border px-2">{row.right}</td>
-                      <td className="border px-2">{row.left}</td>
-                      <td className="border px-2">{row.combined}</td>
-                      <td className="border px-2">{row.percentage}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+    </div >
   );
 }
