@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import fileSlice, { getFileState } from "@/store/slices/file.slice";
 
@@ -28,10 +28,11 @@ interface PowerRow {
 }
 
 export default function Home() {
-  const { datas } = useSelector(getFileState);
+  const { datas, countries } = useSelector(getFileState);
   const [summary, setSummary] = useState<Record<string, string>>({});
   const [summaryTable, setSummaryTable] = useState<any[][]>([]);
   const [powerTables, setPowerTables] = useState<any[]>([]);
+  const [selectedCountry, setSelectedCountry] = useState<string>("")
 
   const normalizeData = (rows: DataRow[]): DataRow[] => {
     return rows.map((row) => {
@@ -60,7 +61,8 @@ export default function Home() {
   };
 
   const execute = () => {
-    // Always work on normalized copy
+    // Always work on normalized copy to reduce error on data computation
+    // const thailand2223: DataRow[] = normalizeData([...datas]).filter(data => data.country_db === selectedCountry);
     const thailand2223: DataRow[] = normalizeData([...datas]);
 
     const columnsToCheck = [
@@ -89,6 +91,8 @@ export default function Home() {
           thailand2223.length) *
         100
       : 0;
+
+    console.log("percentageNoGlasses", percentageNoGlasses)
 
     // ---------- Breakdown ----------
     const readingThailand2223 = thailand2223Glasses.filter(
@@ -242,99 +246,223 @@ export default function Home() {
     setPowerTables(powerTbls);
   };
 
+  const handleSummaryStatsKey = (k: string) => {
+    switch (k) {
+      case "percentageSentToLab":
+        return "Sent to Lab";
+      case "percentageNoGlasses":
+        return "Glasses";
+      case "readingPercentage":
+        return "Reading";
+      case "ophPercentage":
+        return "OPH";
+      case "r2cPercentage":
+        return "R2C";
+      case "glassesPct":
+        return "Glasses";
+      case "readersPct":
+        return "Readers";
+      case "ophthalmicPct":
+        return "Opthalmic";
+      default:
+        return "";
+    }
+  };
+
+  useEffect(() => {
+    execute();
+  }, [selectedCountry]);
+
+  console.log(selectedCountry)
+
   return (
-    <div className="flex flex-col gap-y-5 items-center p-4">
-      <div className="text-center mt-[20px]">
+    <div className="flex flex-col gap-y-3 items-center p-4 overflow-y-hidden w-full">
+      <div className="text-center mt-[5px]">
         <p className="font-avenir-regular font-bold text-[24px]">
           Lens Forecast Dashboard
         </p>
-        <p className="font-avenir-light mt-[20px] lg:w-[40vw]">
+        <p className="font-avenir-light mt-[5px] lg:w-[40vw]">
           Select a country and input the number of people to estimate how many
           Ready 2 Clip lenses you will need for your clinic based on previous
           data.
         </p>
       </div>
 
-      <button className="bg-amber-200 p-3" onClick={execute}>
+      {/* <button className="bg-amber-200 p-3" onClick={execute}>
         Execute
-      </button>
+      </button> */}
 
-      <div className="w-full flex flex-col lg:flex-row justify-center">
-        <div>
-          {/* ---------- Summary ---------- */}
+      <div className="flex w-full flex-row justify-center gap-x-2">
+        <div className="flex">
+          <label className="font-semibold font-avenir-regular text-sm text-wrap mr-3 my-2">
+            Select a Country
+          </label>
+          <select
+            className="border border-gray-400 py-[3px] px-3"
+            id="countries"
+            name="countries"
+            onChange={e => setSelectedCountry(prev => prev = e.target.value)}
+          >
+            {countries.map((c, i) => (
+              <option key={i} value={c}>{c}</option>
+            ))}
+            {/* <option value="ph">Philippines</option>
+            <option value="jp">Japan</option>
+            <option value="us">United States</option>
+            <option value="fr">France</option> */}
+          </select>
+        </div>
+        <div className="">
+          <label className="semi-bold text-sm mr-3 my-2 font-semibold font-avenir-regular">
+            Input the number of people
+          </label>
+          <input className="border border-gray-400 p-2" type="text" />
+        </div>
+      </div>
+
+      <div className="w-full flex flex-col lg:flex-row justify-center gap-x-5">
+        <div className="md:w-[30%]">
           {Object.keys(summary).length > 0 && (
-            <div className="mt-6">
-              <h2 className="text-lg font-bold">Summary Stats</h2>
-              <ul className="list-disc pl-6">
+            <div className="w-full bg-black flex items-center px-2 py-1">
+              <p className="text-white font-avenir-regular font-bold tracking-wider">
+                Results
+              </p>
+            </div>
+          )}
+          <div className="flex flex-col md:flex-row gap-x-2 w-full">
+            {/* ---------- Summary ---------- */}
+            {Object.keys(summary).length > 0 && (
+              <div className="mt-[5px] flex-[1]">
+                <h3 className="font-semibold text-center border border-b-0 border-subtle-grey bg-very-light-blue">
+                  Summary Stats
+                </h3>
+                {/* <ul className="list-disc pl-6">
                 {Object.entries(summary).map(([k, v]) => (
                   <li key={k}>
                     {k}: {v}
                   </li>
                 ))}
-              </ul>
-            </div>
-          )}
-
-          {/* ---------- Gender Summary ---------- */}
-          {summaryTable.length > 0 && (
-            <div className="mt-6">
-              <h2 className="text-lg font-bold">
-                Gender Summary (Excluding Readers)
-              </h2>
-              <table className="border-collapse border border-gray-400">
-                <thead>
-                  <tr>
-                    {summaryTable[0].map((head, i) => (
-                      <th key={i} className="border border-gray-400 px-2 py-1">
-                        {head}
+              </ul> */}
+                <table className="min-w-full border border-subtle-grey">
+                  <thead className="">
+                    <tr>
+                      <th className="px-2 text-left border-b border-subtle-grey bg-very-light-blue">
+                        Key
                       </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {summaryTable.slice(1).map((row, i) => (
-                    <tr key={i}>
-                      {row.map((cell: any, j: number) => (
-                        <td
-                          key={j}
-                          className="border border-gray-400 px-2 py-1"
-                        >
-                          {cell}
+                      <th className="px-2 text-left border-b border-l border-subtle-grey bg-very-light-blue">
+                        Value
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Object.entries(summary).map(([k, v]) => (
+                      <tr key={k} className="">
+                        <td className="border-b border-subtle-grey px-2">
+                          {handleSummaryStatsKey(k)}
                         </td>
+                        <td className="border-b border-subtle-grey px-2 border-l">
+                          {v}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {/* ---------- Gender Summary ---------- */}
+            {summaryTable.length > 0 && (
+              <div className="mt-[5px]">
+                <h3 className="font-semibold text-center border border-b-0 border-subtle-grey bg-very-light-blue">
+                  Gender Summary (Excluding Readers)
+                </h3>
+                <table className="border-collapse border border-subtle-grey w-full">
+                  <thead>
+                    <tr>
+                      {summaryTable[0].map((head, i) => (
+                        <th
+                          key={i}
+                          className="border text-left border-subtle-grey bg-very-light-blue px-2"
+                        >
+                          {head}
+                        </th>
                       ))}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+                  </thead>
+                  <tbody>
+                    {summaryTable.slice(1).map((row, i) => (
+                      <tr key={i}>
+                        {row.map((cell: any, j: number) => (
+                          <td
+                            key={j}
+                            className="border border-subtle-grey px-2"
+                          >
+                            {cell}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* ---------- Power Tables ---------- */}
-        <div>
+        <div className="md:w-[70%] h-[60vh] overflow-x-hidden overflow-y-auto border-b border-subtle-grey">
           {powerTables.length > 0 && (
-            <div className="flex flex-col lg:flex-row gap-x-2">
+            <div className="w-full bg-black flex items-center px-2 py-1">
+              <p className="text-white font-avenir-regular font-bold tracking-wider">
+                Demographic
+              </p>
+            </div>
+          )}
+          {powerTables.length > 0 && (
+            <div className="flex flex-col lg:flex-row gap-x-2 mt-[5px]">
               {powerTables.map((group, idx) => (
-                <div key={idx} className="mt-4">
-                  <h3 className="font-semibold">{group.groupName}</h3>
-                  <table className="border-collapse border border-gray-400 text-sm">
+                <div key={idx} className="w-full">
+                  <h3 className="font-semibold text-center border border-b-0 border-subtle-grey bg-very-light-blue">
+                    {group.groupName}
+                  </h3>
+                  <table className="border-collapse border border-subtle-grey text-sm w-full">
                     <thead>
                       <tr>
-                        <th className="border px-2">Power</th>
-                        <th className="border px-2">Right</th>
-                        <th className="border px-2">Left</th>
-                        <th className="border px-2">Combined</th>
-                        <th className="border px-2">Percentage</th>
+                        <th className="border px-2 border-subtle-grey bg-very-light-blue">
+                          Power
+                        </th>
+                        <th className="border px-2 border-subtle-grey bg-very-light-blue">
+                          Right
+                        </th>
+                        <th className="border px-2 border-subtle-grey bg-very-light-blue">
+                          Left
+                        </th>
+                        <th className="border px-2 border-subtle-grey bg-very-light-blue">
+                          Combined
+                        </th>
+                        <th className="border px-2 border-subtle-grey bg-very-light-blue">
+                          Percentage
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
                       {group.table.map((row: any, i: number) => (
                         <tr key={i}>
-                          <td className="border px-2">{row.power}</td>
-                          <td className="border px-2">{row.right}</td>
-                          <td className="border px-2">{row.left}</td>
-                          <td className="border px-2">{row.combined}</td>
-                          <td className="border px-2">{row.percentage}</td>
+                          <td className="border px-2 border-subtle-grey">
+                            {row.power}
+                          </td>
+                          <td className="border px-2 border-subtle-grey">
+                            {row.right}
+                          </td>
+                          <td className="border px-2 border-subtle-grey">
+                            {row.left}
+                          </td>
+                          <td className="border px-2 border-subtle-grey">
+                            {row.combined}
+                          </td>
+                          <td className="border px-2 border-subtle-grey">
+                            {row.percentage}
+                          </td>
                         </tr>
                       ))}
                     </tbody>

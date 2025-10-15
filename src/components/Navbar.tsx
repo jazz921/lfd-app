@@ -19,7 +19,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="w-full h-[56px] md:h-[72px] flex items-center justify-between fixed top-0 left-0 z-50 bg-white p-3 md:px-9 md:py-3 shadow-md">
+      <nav className="w-full h-[56px] md:h-[65px] flex items-center justify-between fixed top-0 left-0 z-50 bg-white p-3 md:px-9 md:py-3 shadow-md">
         <Image
           src={"/images/osel-logo.png"}
           alt="Organization Logo"

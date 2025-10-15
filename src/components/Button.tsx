@@ -40,6 +40,7 @@ const Button = ({
       <button
         {...rest}
         onClick={handleClick}
+        type={type}
         className={`${className} ${handleDisabled()} font-avenir-light bg-black text-white text-sm p-[11.5px] transition-colors duration-500 ease-in-out hover:bg-sky-blue`}
       >
         <span>{text ? text : children}</span>
@@ -55,6 +56,7 @@ const Button = ({
     return (
       <button
         {...rest}
+        type={type}
         onClick={handleClick}
         className={`${className} font-avenir-regular group relative p-[8px] border-2 border-black overflow-hidden cursor-pointer transition-text duration-500 ease-out hover:border-sky-blue`}
       >

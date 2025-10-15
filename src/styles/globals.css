@@ -20,6 +20,8 @@
   --color-light-blue: #80bdff;
   --color-sky-blue: #5b8dff;
   --color-light-grey: #dadada;
+  --color-very-light-blue: #80BDFF33;
+  --color-subtle-grey: #B6C4DE;
   --color-blue-orange-gradient: linear-gradient(
     90deg,
     #bdd6f6 0%,

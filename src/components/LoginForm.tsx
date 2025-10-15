@@ -30,7 +30,7 @@ const LoginForm = () => {
               <label htmlFor="password" className="w-full text-sm font-medium font-avenir-regular mb-1">Password</label>
               <input type="password" name="password" className="border border-light-grey outline-light-blue pr-9 pl-3 py-2" />
             </div>
-            <Button variant="outlined" text="Login" className="px-4" />
+            <Button variant="outlined" text="Login" type="submit" className="px-4" />
           </div>
         </form>
       </BoxContainer>
