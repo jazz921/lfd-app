@@ -17,7 +17,7 @@ const SideMenu = ({ isOpen, setIsOpen }: SideMenuProps) => {
       close={setIsOpen}
       fullHeight={true}
       position="right"
-      entrance={isOpen ? "slideLeft" : "slideRight"}
+      entrance={isOpen ? "slideLeft" : "slideLeftExit"}
     >
       <div className="bg-white w-[20vw] h-full p-5 flex flex-col justify-between">
         <div className="flex flex-col items-center gap-y-5">

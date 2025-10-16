@@ -10,7 +10,7 @@ interface ModalProps {
   fullWidth?: boolean;
   fullHeight?: boolean;
   children?: React.ReactNode;
-  entrance?: "slideLeft" | "slideRight" | "fadeIn";
+  entrance?: "slideLeft" | "slideLeftExit" | "slideRight" | "fadeIn";
 }
 
 const Modal = ({
@@ -41,6 +41,8 @@ const Modal = ({
     switch (entrance) {
       case "slideLeft":
         return "animate-slide-left";
+      case "slideLeftExit":
+        return "animate-slide-left-exit"
       case "slideRight":
         return "animate-slide-right";
       case "fadeIn":
@@ -51,6 +53,9 @@ const Modal = ({
 
   useEffect(() => {
     setMounted(true);
+    if (open) {
+      setShow(open)
+    }
   }, []);
 
   /*
@@ -63,8 +68,12 @@ const Modal = ({
       setShow(true);
       setAnimate(handleAnimate());
     } else {
-      document.body.style.overflow = "";
-      setShow(false);
+      document.body.style.overflow = "hidden";
+      setAnimate(handleAnimate());
+      setTimeout(() => {
+        document.body.style.overflow = "";
+        setShow(false)
+      }, 500);
     }
 
     return () => {
