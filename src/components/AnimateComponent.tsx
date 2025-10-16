@@ -1,12 +1,17 @@
-import React from 'react'
-import Button from './Button'
+import React from "react";
+import withAnimation from "@/utils/hoc/withAnimation";
 
-const AnimateComponent = () => {
-  return (
-    <div>
-
-    </div>
-  )
+interface AnimateComponentProps {
+  children: React.ReactNode;
 }
 
-export default AnimateComponent
+const AnimateComponent = ({ children }: AnimateComponentProps) => {
+  
+  const toBeAnimate = () => <React.Fragment>{children}</React.Fragment>;
+
+  const Animate = withAnimation(toBeAnimate);
+
+  return <Animate />;
+};
+
+export default AnimateComponent;

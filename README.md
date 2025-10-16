@@ -1,12 +1,4 @@
-# Lens Forecast Dashboard
-
-The Lens Forecast Dashboard (LFD App) is a web-based planning tool designed to replace an existing Excel-based model used for organizing vision care clinics. The dashboard will streamline the process of estimating lens and eyewear requirements by providing an intuitive, data-driven interface for clinic organizers.
-
-**Objective**
-
-The goal of the Lens Forecast Dashboard is to help clinic organizers forecast and plan the types and quantities of lenses required — such as Ready 2 Clip (R2C) lenses, readers, and ophthalmic glasses — based on historical data and country-specific trends from previous clinics.
-
-## Table of Contents
+# Table of Contents
 
 1. Getting Started
 2. Tech Stack

@@ -77,7 +77,7 @@ const UploadModal = ({ uploadModal, handleUploadModal }: UploadModalProps) => {
               Select a file
             </span>
           </label>
-          <p className="ml-4">{fileName}</p>
+          <p className="ml-4 break-all">{fileName}</p>
         </div>
         <div className="flex gap-x-5 items-center">
           <label htmlFor="country">Select Country:</label>

@@ -1,6 +1,7 @@
 import React from "react";
 import ModifyFilesCard from "@/components/AdminPage/ModifyFilesCard";
 import GoToDashboard from "@/components/AdminPage/GoToDashboard";
+import AnimateComponent from "@/components/AnimateComponent";
 
 const AdminHomePage = () => {
   return (
@@ -14,8 +15,12 @@ const AdminHomePage = () => {
       </div>
 
       <div className="flex gap-10 flex-col lg:flex-row">
-        <ModifyFilesCard />
-        <GoToDashboard />
+        <AnimateComponent>
+          <ModifyFilesCard />
+        </AnimateComponent>
+        <AnimateComponent>
+          <GoToDashboard />
+        </AnimateComponent>
       </div>
     </div>
   );

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import fileSlice, { getFileState } from "@/store/slices/file.slice";
+import AnimateComponent from "@/components/AnimateComponent";
 
 interface DataRow {
   Gender?: string;
@@ -32,7 +33,7 @@ export default function Home() {
   const [summary, setSummary] = useState<Record<string, string>>({});
   const [summaryTable, setSummaryTable] = useState<any[][]>([]);
   const [powerTables, setPowerTables] = useState<any[]>([]);
-  const [selectedCountry, setSelectedCountry] = useState<string>("")
+  const [selectedCountry, setSelectedCountry] = useState<string>("");
 
   const normalizeData = (rows: DataRow[]): DataRow[] => {
     return rows.map((row) => {
@@ -92,7 +93,7 @@ export default function Home() {
         100
       : 0;
 
-    console.log("percentageNoGlasses", percentageNoGlasses)
+    console.log("percentageNoGlasses", percentageNoGlasses);
 
     // ---------- Breakdown ----------
     const readingThailand2223 = thailand2223Glasses.filter(
@@ -119,6 +120,7 @@ export default function Home() {
     const childrenGlasses = thailand2223Glasses.filter(
       (row) => (row.Age || 0) <= 12
     );
+    
     const childrenNonReaders = childrenGlasses.filter(
       (row) => row["Pair1 Lens Type"] !== "Reading"
     );
@@ -216,7 +218,7 @@ export default function Home() {
 
     setSummary({
       percentageSentToLab: percentageSentToLab.toFixed(2) + "%",
-      percentageNoGlasses: percentageNoGlasses.toFixed(2) + "%",
+      // percentageNoGlasses: percentageNoGlasses.toFixed(2) + "%",
       readingPercentage: readingPercentage.toFixed(2) + "%",
       ophPercentage: ophPercentage.toFixed(2) + "%",
       r2cPercentage: lenTotalOph
@@ -273,206 +275,215 @@ export default function Home() {
     execute();
   }, [selectedCountry]);
 
-  console.log(selectedCountry)
+  console.log(selectedCountry);
 
   return (
-    <div className="flex flex-col gap-y-3 items-center p-4 overflow-y-hidden w-full">
-      <div className="text-center mt-[5px]">
-        <p className="font-avenir-regular font-bold text-[24px]">
-          Lens Forecast Dashboard
-        </p>
-        <p className="font-avenir-light mt-[5px] lg:w-[40vw]">
-          Select a country and input the number of people to estimate how many
-          Ready 2 Clip lenses you will need for your clinic based on previous
-          data.
-        </p>
-      </div>
+    <AnimateComponent>
+      <div className="flex flex-col gap-y-3 items-center p-4  w-full">
+        <div className="text-center mt-[5px]">
+          <p className="font-avenir-regular font-bold text-[24px]">
+            Lens Forecast Dashboard
+          </p>
+          <p className="font-avenir-light mt-[5px] lg:w-[40vw]">
+            Select a country and input the number of people to estimate how many
+            Ready 2 Clip lenses you will need for your clinic based on previous
+            data.
+          </p>
+        </div>
 
-      {/* <button className="bg-amber-200 p-3" onClick={execute}>
+        {/* <button className="bg-amber-200 p-3" onClick={execute}>
         Execute
       </button> */}
 
-      <div className="flex w-full flex-row justify-center gap-x-2">
-        <div className="flex">
-          <label className="font-semibold font-avenir-regular text-sm text-wrap mr-3 my-2">
-            Select a Country
-          </label>
-          <select
-            className="border border-gray-400 py-[3px] px-3"
-            id="countries"
-            name="countries"
-            onChange={e => setSelectedCountry(prev => prev = e.target.value)}
-          >
-            {countries.map((c, i) => (
-              <option key={i} value={c}>{c}</option>
-            ))}
-            {/* <option value="ph">Philippines</option>
+        <div className="flex w-full flex-row justify-center gap-x-2">
+          <div className="flex">
+            <label className="font-semibold font-avenir-regular text-sm text-wrap mr-3 my-2">
+              Select a Country
+            </label>
+            <select
+              className="border border-gray-400 py-[3px] px-3"
+              id="countries"
+              name="countries"
+              onChange={(e) =>
+                setSelectedCountry((prev) => (prev = e.target.value))
+              }
+            >
+              {countries.map((c, i) => (
+                <option key={i} value={c}>
+                  {c}
+                </option>
+              ))}
+              {/* <option value="ph">Philippines</option>
             <option value="jp">Japan</option>
             <option value="us">United States</option>
             <option value="fr">France</option> */}
-          </select>
+            </select>
+          </div>
+          <div className="">
+            <label className="semi-bold text-sm mr-3 my-2 font-semibold font-avenir-regular">
+              Input the number of people
+            </label>
+            <input className="border border-gray-400 p-2" type="text" />
+          </div>
         </div>
-        <div className="">
-          <label className="semi-bold text-sm mr-3 my-2 font-semibold font-avenir-regular">
-            Input the number of people
-          </label>
-          <input className="border border-gray-400 p-2" type="text" />
-        </div>
-      </div>
 
-      <div className="w-full flex flex-col lg:flex-row justify-center gap-x-5">
-        <div className="md:w-[30%]">
-          {Object.keys(summary).length > 0 && (
-            <div className="w-full bg-black flex items-center px-2 py-1">
-              <p className="text-white font-avenir-regular font-bold tracking-wider">
-                Results
-              </p>
-            </div>
-          )}
-          <div className="flex flex-col md:flex-row gap-x-2 w-full">
-            {/* ---------- Summary ---------- */}
+        <div className="w-full flex flex-col lg:flex-row justify-center gap-x-5">
+          <div className="md:w-[30%]">
             {Object.keys(summary).length > 0 && (
-              <div className="mt-[5px] flex-[1]">
-                <h3 className="font-semibold text-center border border-b-0 border-subtle-grey bg-very-light-blue">
-                  Summary Stats
-                </h3>
-                {/* <ul className="list-disc pl-6">
+              <div className="w-full bg-black flex items-center px-2 py-1">
+                <p className="text-white font-avenir-regular font-bold tracking-wider">
+                  Results
+                </p>
+              </div>
+            )}
+            <div className="flex flex-col md:flex-row gap-x-2 w-full">
+              {/* ---------- Summary ---------- */}
+              {Object.keys(summary).length > 0 && (
+                <div className="mt-[5px] flex-[1]">
+                  <h3 className="font-semibold text-center border border-b-0 border-subtle-grey bg-very-light-blue">
+                    Summary Stats
+                  </h3>
+                  {/* <ul className="list-disc pl-6">
                 {Object.entries(summary).map(([k, v]) => (
                   <li key={k}>
                     {k}: {v}
                   </li>
                 ))}
               </ul> */}
-                <table className="min-w-full border border-subtle-grey">
-                  <thead className="">
-                    <tr>
-                      <th className="px-2 text-left border-b border-subtle-grey bg-very-light-blue">
-                        Key
-                      </th>
-                      <th className="px-2 text-left border-b border-l border-subtle-grey bg-very-light-blue">
-                        Value
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {Object.entries(summary).map(([k, v]) => (
-                      <tr key={k} className="">
-                        <td className="border-b border-subtle-grey px-2">
-                          {handleSummaryStatsKey(k)}
-                        </td>
-                        <td className="border-b border-subtle-grey px-2 border-l">
-                          {v}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-
-            {/* ---------- Gender Summary ---------- */}
-            {summaryTable.length > 0 && (
-              <div className="mt-[5px]">
-                <h3 className="font-semibold text-center border border-b-0 border-subtle-grey bg-very-light-blue">
-                  Gender Summary (Excluding Readers)
-                </h3>
-                <table className="border-collapse border border-subtle-grey w-full">
-                  <thead>
-                    <tr>
-                      {summaryTable[0].map((head, i) => (
-                        <th
-                          key={i}
-                          className="border text-left border-subtle-grey bg-very-light-blue px-2"
-                        >
-                          {head}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {summaryTable.slice(1).map((row, i) => (
-                      <tr key={i}>
-                        {row.map((cell: any, j: number) => (
-                          <td
-                            key={j}
-                            className="border border-subtle-grey px-2"
-                          >
-                            {cell}
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* ---------- Power Tables ---------- */}
-        <div className="md:w-[70%] h-[60vh] overflow-x-hidden overflow-y-auto border-b border-subtle-grey">
-          {powerTables.length > 0 && (
-            <div className="w-full bg-black flex items-center px-2 py-1">
-              <p className="text-white font-avenir-regular font-bold tracking-wider">
-                Demographic
-              </p>
-            </div>
-          )}
-          {powerTables.length > 0 && (
-            <div className="flex flex-col lg:flex-row gap-x-2 mt-[5px]">
-              {powerTables.map((group, idx) => (
-                <div key={idx} className="w-full">
-                  <h3 className="font-semibold text-center border border-b-0 border-subtle-grey bg-very-light-blue">
-                    {group.groupName}
-                  </h3>
-                  <table className="border-collapse border border-subtle-grey text-sm w-full">
-                    <thead>
+                  <table className="min-w-full border border-subtle-grey">
+                    <thead className="">
                       <tr>
-                        <th className="border px-2 border-subtle-grey bg-very-light-blue">
-                          Power
+                        <th className="px-2 text-left border-b border-subtle-grey bg-very-light-blue">
+                          Key
                         </th>
-                        <th className="border px-2 border-subtle-grey bg-very-light-blue">
-                          Right
-                        </th>
-                        <th className="border px-2 border-subtle-grey bg-very-light-blue">
-                          Left
-                        </th>
-                        <th className="border px-2 border-subtle-grey bg-very-light-blue">
-                          Combined
-                        </th>
-                        <th className="border px-2 border-subtle-grey bg-very-light-blue">
-                          Percentage
+                        <th className="px-2 text-left border-b border-l border-subtle-grey bg-very-light-blue">
+                          Value
                         </th>
                       </tr>
                     </thead>
                     <tbody>
-                      {group.table.map((row: any, i: number) => (
-                        <tr key={i}>
-                          <td className="border px-2 border-subtle-grey">
-                            {row.power}
+                      {Object.entries(summary).map(([k, v]) => (
+                        <tr key={k} className="">
+                          <td className="border-b border-subtle-grey px-2">
+                            {handleSummaryStatsKey(k)}
                           </td>
-                          <td className="border px-2 border-subtle-grey">
-                            {row.right}
-                          </td>
-                          <td className="border px-2 border-subtle-grey">
-                            {row.left}
-                          </td>
-                          <td className="border px-2 border-subtle-grey">
-                            {row.combined}
-                          </td>
-                          <td className="border px-2 border-subtle-grey">
-                            {row.percentage}
+                          <td className="border-b border-subtle-grey px-2 border-l">
+                            {v}
                           </td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
-              ))}
+              )}
+
+              {/* ---------- Gender Summary ---------- */}
+              {summaryTable.length > 0 && (
+                <div className="mt-[5px]">
+                  <h3 className="font-semibold text-center border border-b-0 border-subtle-grey bg-very-light-blue">
+                    Gender Summary (Excluding Readers)
+                  </h3>
+                  <table className="border-collapse border border-subtle-grey w-full">
+                    <thead>
+                      <tr>
+                        {summaryTable[0].map((head, i) => (
+                          <th
+                            key={i}
+                            className="border text-left border-subtle-grey bg-very-light-blue px-2"
+                          >
+                            {head}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {summaryTable.slice(1).map((row, i) => (
+                        <tr key={i}>
+                          {row.map((cell: any, j: number) => (
+                            <td
+                              key={j}
+                              className="border border-subtle-grey px-2"
+                            >
+                              {cell}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
-          )}
+          </div>
+
+          {/* ---------- Power Tables ---------- */}
+          <div className="md:w-[70%] h-[60vh] overflow-x-hidden border-b border-subtle-grey relative">
+            {powerTables.length > 0 && (
+              <div className="w-full bg-black flex items-center px-2 py-1 sticky top-0">
+                <p className="text-white font-avenir-regular font-bold tracking-wider">
+                  Demographic
+                </p>
+              </div>
+            )}
+            {powerTables.length > 0 && (
+              <div className="flex flex-col lg:flex-row gap-x-2 mt-[5px]">
+                {powerTables.map((group, idx) => (
+                  <div key={idx} className="w-full overflow-y-auto">
+                    <h3 className="font-semibold text-center border border-b-0 border-subtle-grey bg-very-light-blue">
+                      {group.groupName}
+                    </h3>
+                    <table className="border-collapse border border-subtle-grey text-sm w-full">
+                      <thead>
+                        <tr>
+                          <th className="border px-2 border-subtle-grey bg-very-light-blue">
+                            Power
+                          </th>
+                          <th className="border px-2 border-subtle-grey bg-very-light-blue">
+                            Right
+                          </th>
+                          <th className="border px-2 border-subtle-grey bg-very-light-blue">
+                            Left
+                          </th>
+                          <th className="border px-2 border-subtle-grey bg-very-light-blue">
+                            Combined
+                          </th>
+                          <th className="border px-2 border-subtle-grey bg-very-light-blue">
+                            Percentage
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {group.table.map((row: any, i: number) => (
+                          <tr
+                            key={i}
+                            className="nth-last-[1]:bg-black nth-last-[1]:text-white"
+                          >
+                            <td className="border px-2 border-subtle-grey">
+                              {row.power}
+                            </td>
+                            <td className="border px-2 border-subtle-grey">
+                              {row.right}
+                            </td>
+                            <td className="border px-2 border-subtle-grey">
+                              {row.left}
+                            </td>
+                            <td className="border px-2 border-subtle-grey">
+                              {row.combined}
+                            </td>
+                            <td className="border px-2 border-subtle-grey">
+                              {row.percentage}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </AnimateComponent>
   );
 }
